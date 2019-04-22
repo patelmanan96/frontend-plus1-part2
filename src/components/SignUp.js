@@ -26,7 +26,6 @@ class SignUp extends Component {
             this.state.email);
         let t= this;
         let redirect = this.props.history;
-
         this.userService.registerUser(obj).then(
             function (user) {
                 if(user.username === undefined){

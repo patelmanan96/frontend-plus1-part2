@@ -1,9 +1,9 @@
 class UserService{
     constructor(){
-        this.registerLink = '';
+        this.registerLink = 'https://restbcken-plus1part2-diversity.herokuapp.com';
     }
     registerUser = (user) => {
-        return fetch(this.registerLink, {
+        return fetch(this.registerLink+'/api/register', {
             method: 'post',
             body: JSON.stringify(user),
             headers: {
@@ -15,7 +15,7 @@ class UserService{
     }
 
     loginUser = (user) => {
-        return fetch(this.loginLink, {
+        return fetch(this.registerLink + '/api/login', {
             method: 'post',
             body: JSON.stringify(user),
             headers: {

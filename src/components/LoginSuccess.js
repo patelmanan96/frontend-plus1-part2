@@ -3,10 +3,11 @@ import React from 'react';
 class LoginSuccess extends React.Component{
     constructor(props){
         super(props);
+        this.username = this.props.match.params.username;
     }
     render() {
         return(
-            <h1>LOGIN SUCCESS</h1>
+            <h1>Welcome {this.username} </h1>
         )
     }
 }

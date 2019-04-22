@@ -36,7 +36,7 @@ class SignUp extends Component {
                     )
                 }
                 else{
-                    redirect.push("/loginSuccess")
+                    redirect.push("/loginSuccess/"+user.username);
                 }
             }
         )

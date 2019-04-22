@@ -12,7 +12,7 @@ class App extends Component {
         <Router>
           <Route path='/login' component={LoginPage}/>
           <Route path='/signUp' component={SignUp}/>
-          <Route path='/loginSuccess' component={LoginSuccess}/>
+          <Route path='/loginSuccess/:username' component={LoginSuccess}/>
         </Router>
       </div>
     );

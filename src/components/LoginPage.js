@@ -37,7 +37,7 @@ class LoginPage extends React.Component{
         let t = this;
         let ret = queried.then(function (res) {
             if(res.username !== null){
-                redirect.push("/loginSuccess");
+                redirect.push("/loginSuccess/"+res.username);
             }
             else{
                 t.setState(

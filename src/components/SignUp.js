@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import User from "../model/User";
+import UserService from "../services/UserService";
 
 
 class SignUp extends Component {
@@ -9,48 +11,76 @@ class SignUp extends Component {
             emptyField: false,
             failedPassword: false,
             usernameRepeated: false,
+            fname:'',
+            lname:'',
             username: '',
             password: '',
-            verifyPassword: ''
+            verifyPassword: '',
+            email:''
         }
+        this.userService = new UserService();
     }
 
     checkAndSignUp = () => {
-        /*if(this.state.username === "" || this.state.password === ""){
-            this.setState(
-                {
-                    emptyField:true,
-                    failedPassword:false,
-                    usernameRepeated:false
+        let obj = new User(this.state.username, this.state.password, this.state.fname, this.state.lname,
+            this.state.email);
+        let t= this;
+        let redirect = this.props.history;
+
+        this.userService.registerUser(obj).then(
+            function (user) {
+                if(user.username === undefined){
+                    t.setState(
+                        {
+                            usernameRepeated:true
+                        }
+                    )
                 }
-            )
-        }
-        else {
-                let queried = this.userService.registerUser(obj);
-                console.log(queried)
-                let redirect = this.props.history;
-                let uService = this.userService;
-                let stateLocal = this
-                queried.then(function (res) {
-                    console.log(res)
-                    if (res.username !== null) {
-                        uService.currentUser().then(
-                            function (v) {
-                            }
-                        )
-                        redirect.push("/table");
-                    } else {
-                        stateLocal.setState(
-                            {
-                                failedPassword: false,
-                                usernameRepeated: true,
-                                emptyField:false
-                            }
-                        )
-                    }
-                })
+                else{
+                    redirect.push("/loginSuccess")
+                }
             }
-        }*/
+        )
+    }
+
+    usernameModified = (event) => {
+        this.setState(
+            {
+                username: event.target.value
+            }
+        )
+    }
+
+    passwordModified = (event) => {
+        this.setState(
+            {
+                password: event.target.value
+            }
+        )
+    }
+
+    firstNameModified = (event) => {
+        this.setState(
+            {
+                fname: event.target.value
+            }
+        )
+    }
+
+    lastNameModified = (event) => {
+        this.setState(
+            {
+                lname: event.target.value
+            }
+        )
+    }
+
+    emailModified = (event) => {
+        this.setState(
+            {
+                email: event.target.value
+            }
+        )
     }
 
 
@@ -60,45 +90,35 @@ class SignUp extends Component {
             <div className="container">
                 <h1>Sign Up</h1>
                 {
-                    this.state.failedPassword === true && <div className="alert alert-danger" role="alert">
-                        Passwords Don't Match
-                    </div>
-                }
-                {
-                    this.state.emptyField === true && <div className="alert alert-danger" role="alert">
-                        Enter Both Username And Password. Cannot Sign Up Empty.
-                    </div>
-                }
-                {
                     this.state.usernameRepeated === true && <div className="alert alert-danger" role="alert">
                         Username Not Available
                     </div>
                 }
                 <div className="form-group row">
-                    <label htmlFor="username" id="usernameFld" className="col-sm-2 col-form-label">
+                    <label onChange={this.firstNameModified} htmlFor="username" id="usernameFld" className="col-sm-2 col-form-label">
                         First Name </label>
                     <div className="col-sm-10">
-                        <input className="form-control" placeholder="Username"
+                        <input className="form-control" placeholder="First Name"
                                id="username"/>
                     </div>
                 </div>
                 <div className="form-group row">
-                    <label htmlFor="username" id="usernameFld" className="col-sm-2 col-form-label">
+                    <label onChange={this.lastNameModified} htmlFor="username" id="usernameFld" className="col-sm-2 col-form-label">
                         Last Name </label>
                     <div className="col-sm-10">
-                        <input className="form-control" placeholder="Username"
+                        <input className="form-control" placeholder="Last Name"
                                id="username"/>
                     </div>
                 </div>
                 <div className="form-group row">
-                    <label htmlFor="username" id="usernameFld" className="col-sm-2 col-form-label">
+                    <label onChange={this.emailModified} htmlFor="username" id="usernameFld" className="col-sm-2 col-form-label">
                         Email </label>
                     <div className="col-sm-10">
-                        <input className="form-control" placeholder="Username"
+                        <input className="form-control" placeholder="Email"
                                id="username"/>
                     </div>
                 </div>
-                <div className="form-group row">
+                <div onChange={this.usernameModified} className="form-group row">
                     <label htmlFor="username" id="usernameFld" className="col-sm-2 col-form-label">
                         Username </label>
                     <div className="col-sm-10">
@@ -106,24 +126,14 @@ class SignUp extends Component {
                                id="username"/>
                     </div>
                 </div>
-                <div className="form-group row">
+                <div onChange={this.passwordModified} className="form-group row">
                     <label htmlFor="password" className="col-sm-2 col-form-label">
                         Password </label>
                     <div className="col-sm-10">
                         <input type="password" placeholder="Password" id="passwordFld"
-                               className="form-control wbdv-password-fld" id="password"/>
+                               className="form-control wbdv-password-fld" id="Password"/>
                     </div>
                 </div>
-                <div className="form-group row">
-                    <label htmlFor="password" className="col-sm-2 col-form-label">
-                        Verify Password </label>
-                    <div className="col-sm-10">
-                        <input type="password" placeholder="Verify Password"
-                               id="verifyPasswordFld"
-                               id="verifyPasswordFld" className="form-control wbdv-password-fld"/>
-                    </div>
-                </div>
-
                 <div className="form-group row">
                     <label htmlFor="password" className="col-sm-2 col-form-label"></label>
                     <div className="col-sm-10">
@@ -135,7 +145,7 @@ class SignUp extends Component {
                                 <Link to="/login">Login</Link>
                             </div>
                             <div className="col-6">
-                                <Link to="/" className="float-right">Cancel</Link>
+                                <Link to="/signUp" className="float-right">Cancel</Link>
                             </div>
                         </div>
                     </div>

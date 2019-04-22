@@ -1,5 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
+import User from "../model/User";
+import UserService from "../services/UserService";
 
 class LoginPage extends React.Component{
     constructor(props){
@@ -9,6 +11,7 @@ class LoginPage extends React.Component{
             password: '',
             failed :  false
         }
+        this.userService = new UserService();
     }
 
     usernameModified = (event) => {
@@ -28,7 +31,22 @@ class LoginPage extends React.Component{
     }
 
     checkAndLogin = () => {
-
+        let obj = new User(this.state.username, this.state.password, null, null, null)
+        let queried = this.userService.loginUser(obj);
+        let redirect = this.props.history;
+        let t = this;
+        let ret = queried.then(function (res) {
+            if(res.username !== null){
+                redirect.push("/loginSuccess");
+            }
+            else{
+                t.setState(
+                    {
+                        failed:true
+                    }
+                )
+            }
+        })
     }
 
     signUp = () => {
